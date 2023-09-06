@@ -1,5 +1,6 @@
 const { Sequelize, Op } = require('sequelize');
 const { Employee } = require('../models/index');
+const { update } = require('../models/employee');
 
 const dao = {
   // 직원추가
@@ -46,6 +47,66 @@ const dao = {
         .catch((err) => {
           reject(err);
         });
+    });
+  },
+  // 전체 직원 조회
+  getEmployeeDataData() {
+    return new Promise((resolve, reject) => {
+      Employee.findAll({
+        attributes: ['employee_num', 'employee_name', 'department', 'rank', 'phone', 'email', 'admin_ok'],
+      }).then((selectAll) => {
+        resolve(selectAll);
+      })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  // 폰 중복 확인
+  phoneCheck(data) {
+    return new Promise((resolve, reject) => {
+      Employee.findAndCountAll({
+        attributes: ['phone'],
+        where: { phone: data },
+      }).then((selectOne) => {
+        console.log(selectOne.count);
+        resolve(selectOne.count);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  },
+  // 메일 중복 확인
+  emailCheck(data) {
+    return new Promise((resolve, reject) => {
+      Employee.findAndCountAll({
+        attributes: ['email'],
+        where: { email: data },
+      }).then((selectOne) => {
+        console.log(selectOne.count);
+        resolve(selectOne.count);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  },
+  // 내 정보 업뎃
+  myDataUpdate(data) {
+    return new Promise((resolve, reject) => {
+      Employee.update(
+        { user_pwd: data.user_pwd, phone: data.phone, email: data.email },
+        {
+          where: {
+            employee_num: data.employee_num,
+          },
+        },
+      ).then(([updated]) => {
+        console.log('수정 성공: ', updated);
+        resolve({ updatedCount: updated });
+      }).catch((err) => {
+        console.log('수정 실패: ', err);
+        reject(err);
+      });
     });
   },
 };

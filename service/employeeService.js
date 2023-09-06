@@ -91,6 +91,77 @@ const service = {
       resolve(result);
     });
   },
+  // 폰 중복 체크
+  async phoneCheck(data) {
+    let inserted = null;
+    let yn = null;
+    try {
+      inserted = await employeeDAO.phoneCheck(data);
+      if (inserted > 0) {
+        yn = 'N';
+      } else if (inserted === 0) {
+        yn = 'Y';
+      }
+    } catch (err) {
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    console.log(yn);
+    return new Promise((resolve) => {
+      resolve(yn);
+    });
+  },
+  // 메일 중복 체크
+  async emailCheck(data) {
+    let inserted = null;
+    let yn = null;
+    try {
+      inserted = await employeeDAO.emailCheck(data);
+      if (inserted > 0) {
+        yn = 'N';
+      } else if (inserted === 0) {
+        yn = 'Y';
+      }
+    } catch (err) {
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    console.log(yn);
+    return new Promise((resolve) => {
+      resolve(yn);
+    });
+  },
+  // 내 정보 업뎃
+  async myDataUpdate(data) {
+    let result = null;
+
+    // 비번 암호화
+    let hashPassword = null;
+    try {
+      hashPassword = await hashUtil.makePasswordHash(data.user_pwd);
+    } catch (err) {
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    // 암호화 된거로 등록
+    const newData = {
+      ...data,
+      user_pwd: hashPassword,
+    };
+    try {
+      result = await employeeDAO.myDataUpdate(newData);
+    } catch (err) {
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
 };
 
 module.exports = service;

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 
 const router = express.Router();
@@ -14,6 +15,7 @@ router.post('/join', async (req, res) => {
       email: req.body.email,
       department: req.body.department,
       rank: req.body.rank,
+      admin_ok: 'N',
     };
     await employeeService.add(data);
 
@@ -27,8 +29,8 @@ router.post('/join', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const data = {
-      employee_num: req.body.userid,
-      user_pwd: req.body.password,
+      employee_num: req.body.employee_num,
+      user_pwd: req.body.user_pwd,
     };
     console.log(`로그인 데이터 ${JSON.stringify(data)}`);
     // 입력값 null
@@ -55,7 +57,6 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.log(err.toString());
     if (!res.body) {
-      console.log('sdfgsdff');
       res.status(204).send('입력 정보를 확인 하세요.!');
       return;
       // express는 204상태코드에 대해 response body를 보여주지 않고 넘어간다
@@ -67,14 +68,65 @@ router.post('/login', async (req, res) => {
 router.get('/myData?:id', /* isLoggedIn, */ async (req, res) => {
   let myData = null;
   try {
-    myData = await employeeService.getMyData(req.body.loginid);
+    myData = await employeeService.getMyData(req.body.employee_num);
     console.log(`내정보 조회 :  ${JSON.stringify(myData)}`);
     res.status(200).json(myData);
   } catch (err) {
     res.status(500).json({ err: err.toString() });
   }
 });
-// 폰번호 변경
+// 전체직원 조회
+router.get('/employeeAll', async (req, res) => {
+  let employeeData = null;
+  try {
+    employeeData = await employeeDAO.getEmployeeDataData();
+    console.log(`전체직원 조회 :  ${JSON.stringify(employeeData)}`);
+    res.status(200).json(employeeData);
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+});
+// 폰 중복 확인
+router.post('/phoneCheck', async (req, res) => {
+  let result = null;
 
-// 비번 변경
+  const phoneDouble = await employeeService.phoneCheck(req.body.phone);
+
+  if (phoneDouble !== 'N') {
+    result = 'Y';
+  } else if (phoneDouble === 'N') {
+    result = 'N';
+  }
+  res.status(200).json(result);
+});
+// 메일 중복 확인
+router.post('/emailCheck', async (req, res) => {
+  let result = null;
+
+  const emailDouble = await employeeService.emailCheck(req.body.email);
+
+  if (emailDouble !== 'N') {
+    result = 'Y';
+  } else if (emailDouble === 'N') {
+    result = 'N';
+  }
+  res.status(200).json(result);
+});
+// 내정보 수정
+router.put('/update?:id', /* isLoggedIn, */ async (req, res) => {
+  try {
+    const myData = {
+      employee_num: req.body.employee_num,
+      user_pwd: req.body.user_pwd,
+      phone: req.body.phone,
+      email: req.body.email,
+    };
+    console.log(`내 정보 업뎃 : ${JSON.stringify(myData)}`);
+    await employeeService.myDataUpdate(myData);
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+});
 module.exports = router;
