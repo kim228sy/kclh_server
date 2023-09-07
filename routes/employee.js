@@ -110,7 +110,6 @@ router.put('/update?:id', /* isLoggedIn, */ async (req, res) => {
       employee_num: req.body.employee_num,
       user_pwd: req.body.user_pwd,
       phone: req.body.phone,
-      email: req.body.email,
     };
     console.log(`내 정보 업뎃 : ${JSON.stringify(myData)}`);
     await employeeService.myDataUpdate(myData);
