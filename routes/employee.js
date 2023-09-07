@@ -8,14 +8,17 @@ const tokenUtil = require('../lib/tokenUtil');
 const { isLoggedIn } = require('../lib/middleware');
 // 직원 등록
 router.post('/join', async (req, res) => {
+  // 메일 자동생성 - 사번 최대값 가져오기
+  const maxNum = await employeeDAO.max();
   try {
     const data = {
       employee_name: req.body.employee_name,
       phone: req.body.phone,
-      email: req.body.email,
+      email: `${maxNum + 1}@uvc.io`,
       department: req.body.department,
       rank: req.body.rank,
-      admin_ok: 'N',
+      factory: req.body.factory,
+      admin_ok: req.body.admin_ok,
     };
     await employeeService.add(data);
 
@@ -99,19 +102,7 @@ router.post('/phoneCheck', async (req, res) => {
   }
   res.status(200).json(result);
 });
-// 메일 중복 확인
-router.post('/emailCheck', async (req, res) => {
-  let result = null;
 
-  const emailDouble = await employeeService.emailCheck(req.body.email);
-
-  if (emailDouble !== 'N') {
-    result = 'Y';
-  } else if (emailDouble === 'N') {
-    result = 'N';
-  }
-  res.status(200).json(result);
-});
 // 내정보 수정
 router.put('/update?:id', /* isLoggedIn, */ async (req, res) => {
   try {

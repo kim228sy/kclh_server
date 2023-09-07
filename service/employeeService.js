@@ -112,27 +112,7 @@ const service = {
       resolve(yn);
     });
   },
-  // 메일 중복 체크
-  async emailCheck(data) {
-    let inserted = null;
-    let yn = null;
-    try {
-      inserted = await employeeDAO.emailCheck(data);
-      if (inserted > 0) {
-        yn = 'N';
-      } else if (inserted === 0) {
-        yn = 'Y';
-      }
-    } catch (err) {
-      return new Promise((resolve, reject) => {
-        reject(err);
-      });
-    }
-    console.log(yn);
-    return new Promise((resolve) => {
-      resolve(yn);
-    });
-  },
+
   // 내 정보 업뎃
   async myDataUpdate(data) {
     let result = null;

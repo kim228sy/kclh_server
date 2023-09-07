@@ -27,6 +27,9 @@ module.exports = class Employee extends Sequelize.Model {
         email: {
           type: Sequelize.STRING(50),
         },
+        factory: {
+          type: Sequelize.STRING(50),
+        },
         admin_ok: {
           type: Sequelize.CHAR,
         },

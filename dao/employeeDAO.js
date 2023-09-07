@@ -14,6 +14,14 @@ const dao = {
       });
     });
   },
+  // 사번 최대값
+  max() {
+    return new Promise((resolve, reject) => {
+      Employee.max('employee_num').then((max) => {
+        resolve(max);
+      });
+    });
+  },
   // 로그인
   selectUser(params) {
     console.log(`로그인 DAO : ${JSON.stringify(params)}`);
@@ -76,20 +84,7 @@ const dao = {
       });
     });
   },
-  // 메일 중복 확인
-  emailCheck(data) {
-    return new Promise((resolve, reject) => {
-      Employee.findAndCountAll({
-        attributes: ['email'],
-        where: { email: data },
-      }).then((selectOne) => {
-        console.log(selectOne.count);
-        resolve(selectOne.count);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  },
+
   // 내 정보 업뎃
   myDataUpdate(data) {
     return new Promise((resolve, reject) => {
