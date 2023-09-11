@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-unused-vars */
 const express = require('express');
 
@@ -49,14 +50,13 @@ router.post('/login', async (req, res) => {
     const token = tokenUtil.makeToken(result);
     console.log(`로그인 토큰 : ${token}`);
 
-    // eslint-disable-next-line prefer-destructuring
-    const name = result.name;
+    console.log(`qwer ${JSON.stringify(result)}`);
     // 최종 응답
     res
       .cookie('jwt', token, { maxAge: 3600000 })
       .status(200)
       // eslint-disable-next-line object-shorthand
-      .json({ success: true, token: token, name: name });
+      .json({ success: true, token: token, name: result });
   } catch (err) {
     console.log(err.toString());
     if (!res.body) {

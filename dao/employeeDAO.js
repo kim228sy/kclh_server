@@ -27,7 +27,7 @@ const dao = {
     console.log(`로그인 DAO : ${JSON.stringify(params)}`);
     return new Promise((resolve, reject) => {
       Employee.findOne({
-        attributes: ['employee_num', 'employee_name', 'department', 'user_pwd', 'rank', 'phone', 'email'],
+        attributes: ['employee_num', 'employee_name', 'department', 'user_pwd', 'rank', 'phone', 'email', 'factory'],
         where: {
           employee_num: params.employee_num,
         },
