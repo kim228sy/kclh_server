@@ -27,7 +27,7 @@ const dao = {
     console.log(`로그인 DAO : ${JSON.stringify(params)}`);
     return new Promise((resolve, reject) => {
       Employee.findOne({
-        attributes: ['employee_num', 'employee_name', 'department', 'user_pwd', 'rank', 'phone', 'email', 'factory'],
+        attributes: ['employee_num', 'employee_name', 'department', 'rank', 'phone', 'email', 'factory', 'admin_ok'],
         where: {
           employee_num: params.employee_num,
         },
@@ -47,7 +47,7 @@ const dao = {
   getMyData(data) {
     return new Promise((resolve, reject) => {
       Employee.findOne({
-        attributes: ['employee_num', 'employee_name', 'department', 'rank', 'phone', 'email'],
+        attributes: ['employee_num', 'employee_name', 'department', 'rank', 'phone', 'email', 'admin_ok'],
         where: { employee_num: data },
       }).then((selectOne) => {
         resolve(selectOne);
@@ -90,6 +90,25 @@ const dao = {
     return new Promise((resolve, reject) => {
       Employee.update(
         { user_pwd: data.user_pwd, phone: data.phone, email: data.email },
+        {
+          where: {
+            employee_num: data.employee_num,
+          },
+        },
+      ).then(([updated]) => {
+        console.log('수정 성공: ', updated);
+        resolve({ updatedCount: updated });
+      }).catch((err) => {
+        console.log('수정 실패: ', err);
+        reject(err);
+      });
+    });
+  },
+  // 관리자 사원 정보 수정
+  adminUpdate(data) {
+    return new Promise((resolve, reject) => {
+      Employee.update(
+        { department: data.department, rank: data.rank, admin_ok: data.admin_ok },
         {
           where: {
             employee_num: data.employee_num,

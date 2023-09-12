@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-unused-vars */
 const express = require('express');
@@ -12,6 +13,18 @@ router.post('/join', async (req, res) => {
   // 메일 자동생성 - 사번 최대값 가져오기
   const maxNum = await employeeDAO.max();
   try {
+    let admin = null;
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let date = today.getDate();
+    let ymd = `${year}-${month}-${date}`;
+    console.log(ymd);
+    if (req.body.admin_ok === '관리자') {
+      admin = 'Y';
+    } else if (req.body.admin_ok === '사원') {
+      admin = 'N';
+    }
     const data = {
       employee_name: req.body.employee_name,
       phone: req.body.phone,
@@ -19,7 +32,8 @@ router.post('/join', async (req, res) => {
       department: req.body.department,
       rank: req.body.rank,
       factory: req.body.factory,
-      admin_ok: req.body.admin_ok,
+      admin_ok: admin,
+      joinDate: ymd,
     };
     await employeeService.add(data);
 
@@ -118,5 +132,33 @@ router.put('/update?:id', /* isLoggedIn, */ async (req, res) => {
   } catch (err) {
     res.status(500).json({ err: err.toString() });
   }
+});
+// 관리자가 직원 정보 수정
+router.put('/adminUpdate?:id', /* isLoggedIn, */ async (req, res) => {
+  try {
+    let admin = null;
+    if (req.body.admin_ok === '관리자') {
+      admin = 'Y';
+    } else if (req.body.admin_ok === '사원') {
+      admin = 'N';
+    }
+    const myData = {
+      employee_num: req.body.employee_num,
+      department: req.body.department,
+      rank: req.body.rank,
+      factory: req.body.factory,
+      admin_ok: admin,
+    };
+    console.log(`관리자 정보 업뎃 : ${JSON.stringify(myData)}`);
+    await employeeService.adminUpdate(myData);
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+});
+// 직원 퇴사 처리
+router.put('/resignDate?:id', /* isLoggedIn, */ async (req, res) => {
+
 });
 module.exports = router;

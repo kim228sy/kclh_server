@@ -33,6 +33,13 @@ module.exports = class Employee extends Sequelize.Model {
         admin_ok: {
           type: Sequelize.CHAR,
         },
+        joinDate: {
+          type: Sequelize.STRING(50),
+
+        },
+        resignDate: {
+          type: Sequelize.STRING(50),
+        },
       },
       {
         sequelize,

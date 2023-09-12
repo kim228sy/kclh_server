@@ -142,6 +142,20 @@ const service = {
       resolve(result);
     });
   },
+  // 관리자 사원 정보 수정
+  async adminUpdate(data) {
+    let result = null;
+    try {
+      result = await employeeDAO.adminUpdate(data);
+    } catch (err) {
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
 };
 
 module.exports = service;
