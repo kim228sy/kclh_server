@@ -66,7 +66,7 @@ const dao = {
           "rank",
           "phone",
           "email",
-          "admin_ok",
+          "factory",
         ],
         where: { employee_num: data },
       })
@@ -79,7 +79,7 @@ const dao = {
     });
   },
   // 폰 번호 변경
-  updatePhone(data){
+  updatePhone(data) {
     return new Promise((resolve, reject) => {
       Employee.update(
         { phone: data.phone },
@@ -167,6 +167,7 @@ const dao = {
         {
           department: data.department,
           rank: data.rank,
+          factory: data.factory,
           admin_ok: data.admin_ok,
         },
         {

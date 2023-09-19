@@ -1,12 +1,12 @@
-const employeeDAO = require('../dao/employeeDAO');
-const hashUtil = require('../lib/hashUtil');
+const employeeDAO = require("../dao/employeeDAO");
+const hashUtil = require("../lib/hashUtil");
 
 const service = {
   // 직원 추가
   async add(data) {
     console.log(`직원추가 서비스 : ${JSON.stringify(data)}`);
     let inserted = null;
-    const pwd = '000000';
+    const pwd = "000000";
     // 비번 암호화
     let hashPassword = null;
     try {
@@ -41,7 +41,7 @@ const service = {
       user = await employeeDAO.selectUser(data);
       // 데이터 불일치
       if (!user) {
-        const err = new Error('아이디 ,비번 확인');
+        const err = new Error("아이디 ,비번 확인");
         return new Promise((resolve, reject) => {
           reject(err);
         });
@@ -55,11 +55,11 @@ const service = {
     try {
       const checkPassword = await hashUtil.checkPasswordHash(
         data.user_pwd,
-        user.user_pwd,
+        user.user_pwd
       );
 
       if (!checkPassword) {
-        const err = new Error('비번 확인');
+        const err = new Error("비번 확인");
 
         return new Promise((resolve, reject) => {
           reject(err);
@@ -98,9 +98,9 @@ const service = {
     try {
       inserted = await employeeDAO.phoneCheck(data);
       if (inserted > 0) {
-        yn = 'N';
+        yn = "N";
       } else if (inserted === 0) {
-        yn = 'Y';
+        yn = "Y";
       }
     } catch (err) {
       return new Promise((resolve, reject) => {

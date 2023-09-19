@@ -92,7 +92,7 @@ router.get(
   /* isLoggedIn, */ async (req, res) => {
     let myData = null;
     try {
-      myData = await employeeService.getMyData(req.body.employee_num);
+      myData = await employeeService.getMyData(req.params.id);
       console.log(`내정보 조회 :  ${JSON.stringify(myData)}`);
       res.status(200).json(myData);
     } catch (err) {
@@ -167,18 +167,19 @@ router.put(
   "/adminUpdate?:id",
   /* isLoggedIn, */ async (req, res) => {
     try {
-      let admin = null;
-      if (req.body.admin_ok === "관리자") {
-        admin = "Y";
-      } else if (req.body.admin_ok === "사원") {
-        admin = "N";
-      }
+      // let admin = null;
+      // if (req.body.admin_ok === "관리자") {
+      //   admin = "Y";
+      // } else if (req.body.admin_ok === "사원") {
+      //   admin = "N";
+      // }
       const myData = {
         employee_num: req.body.employee_num,
         department: req.body.department,
         rank: req.body.rank,
         factory: req.body.factory,
-        admin_ok: admin,
+        // admin_ok: admin,
+        admin_ok: req.body.admin_ok,
       };
       console.log(`관리자 정보 업뎃 : ${JSON.stringify(myData)}`);
       await employeeService.adminUpdate(myData);

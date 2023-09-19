@@ -1,10 +1,12 @@
 {
   "origin": [
     "http://localhost:3000",
+    "http://localhost:3001",
     "http://localhost:8000",
     "http://192.168.0.112:8000",
     "http://192.168.0.75:3000",
     "http://192.168.0.62:3000",
+    "http://192.168.0.62:3001",
     "*"
   ],
   "methods": ["OPTIONS", "GET", "POST", "HEAD", "PUT", "DELETE"],
