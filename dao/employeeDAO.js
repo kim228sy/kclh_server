@@ -78,6 +78,27 @@ const dao = {
         });
     });
   },
+  // 폰 번호 변경
+  updatePhone(data){
+    return new Promise((resolve, reject) => {
+      Employee.update(
+        { phone: data.phone },
+        {
+          where: {
+            employee_num: data.employee_num,
+          },
+        }
+      )
+        .then(([updated]) => {
+          console.log("수정 성공: ", updated);
+          resolve({ updatedCount: updated });
+        })
+        .catch((err) => {
+          console.log("수정 실패: ", err);
+          reject(err);
+        });
+    });
+  },
   // 전체 직원 조회
   getEmployeeDataData() {
     return new Promise((resolve, reject) => {

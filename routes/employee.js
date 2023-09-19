@@ -144,6 +144,24 @@ router.put(
     }
   }
 );
+// 폰 수정
+router.put(
+  "/updatePhone?:id",
+  /* isLoggedIn, */ async (req, res) => {
+    try {
+      const phone = {
+        employee_num: req.body.employee_num,
+        phone: req.body.phone,
+      };
+      console.log(`폰번호 변경 : ${JSON.stringify(phone)}`);
+      await employeeDAO.updatePhone(phone);
+
+      res.status(200).json({ success: true });
+    } catch (err) {
+      res.status(500).json({ err: err.toString() });
+    }
+  }
+);
 // 관리자가 직원 정보 수정
 router.put(
   "/adminUpdate?:id",
